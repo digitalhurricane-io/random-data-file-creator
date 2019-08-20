@@ -29,12 +29,27 @@ def writeFile(numGB, path):
     return outputPath
 
 def sha256sum(filename):
+    fileSize = os.path.getsize(filename)
+    lastPercentagePoint = 0
+    bytesProcessed = 0
+
     h = hashlib.sha256()
     b = bytearray(128*1024)
     mv = memoryview(b)
     with open(filename, 'rb', buffering=0) as f:
+        newBytes = ''
         for n in iter(lambda: f.readinto(mv), 0):
-            h.update(mv[:n])
+            newBytes = mv[:n]
+            h.update(newBytes)
+
+            bytesProcessed += len(newBytes)
+            
+            # print progress
+            percentageComplete = bytesProcessed / fileSize
+            if (percentageComplete * 100) - lastPercentagePoint > 1:
+                lastPercentagePoint = (percentageComplete * 100)
+                print('percentage complete: ', str(round(lastPercentagePoint)) + '%')
+
     return h.hexdigest()
 
 def writeSumToFile(nameOfHashedFile, fileHash):
@@ -51,7 +66,7 @@ actions = '''Enter a or b:
 a.) Write file with random data and generate hash of file
 b.) Get file hash
 
-'''
+I choose: '''
 
 action = input(actions)
 
