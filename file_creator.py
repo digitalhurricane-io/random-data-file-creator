@@ -15,7 +15,8 @@ def writeFile(numGB, path):
 
     with open(outputPath, 'wb') as fout:
         # write 1 GB at a time so we don't run out of memory
-        for _ in range(numGB):
+        for i in range(numGB):
+            print(f'{i} GB written to disk')
             fout.write(os.urandom(singleGB))
 
     return outputPath
