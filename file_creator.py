@@ -49,7 +49,7 @@ action = input(actions)
 if action == 'a':
     desiredSize = input('Enter desired file size in GB: ')
 
-    outputPath = input('Enter the path for the file, or just press enter for current directory');
+    outputPath = input('Enter the path for the file, or just press enter to use the current directory of the script: \n');
 
     print('\nWriting file...\n')
 
