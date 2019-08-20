@@ -4,11 +4,15 @@ import random
 import string
 import sys
 
-def writeFile(numGB):
+def writeFile(numGB, path):
     desired_size = 1024*1024*1024 * int(numGB)
     filename = f'output_file_{randomString()}.dat'
+    if path:
+        outputPath = path
+    else:
+        outputPath = filename
     print('filename: {0}'.format(filename))
-    with open(filename, 'wb') as fout:
+    with open(outputPath, 'wb') as fout:
         fout.write(os.urandom(desired_size))
 
     return filename
@@ -44,9 +48,11 @@ action = input(actions)
 if action == 'a':
     desiredSize = input('Enter desired file size in GB: ')
 
+    outputPath = input('Enter the path for the file, or just press enter for current directory');
+
     print('\nWriting file...\n')
 
-    fileName = writeFile(int(desiredSize))
+    fileName = writeFile(int(desiredSize), outputPath)
     fileHash = sha256sum(fileName)
     print('sha256sum: ' + fileHash)
     writeSumToFile(fileName, fileHash)
