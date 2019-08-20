@@ -5,7 +5,7 @@ import string
 import sys
 
 def writeFile(numGB, path):
-    desired_size = 1024*1024*1024 * int(numGB)
+    singleGB = 1024*1024*1024
 
     filename = f'output_file_{randomString()}.dat'
     if path:
@@ -14,7 +14,9 @@ def writeFile(numGB, path):
         outputPath = filename
 
     with open(outputPath, 'wb') as fout:
-        fout.write(os.urandom(desired_size))
+        # write 1 GB at a time so we don't run out of memory
+        for _ in range(numGB):
+            fout.write(os.urandom(singleGB))
 
     return outputPath
 
