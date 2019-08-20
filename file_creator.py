@@ -6,16 +6,17 @@ import sys
 
 def writeFile(numGB, path):
     desired_size = 1024*1024*1024 * int(numGB)
+
     filename = f'output_file_{randomString()}.dat'
     if path:
         outputPath = path
     else:
         outputPath = filename
-    print('filename: {0}'.format(filename))
+
     with open(outputPath, 'wb') as fout:
         fout.write(os.urandom(desired_size))
 
-    return filename
+    return outputPath
 
 def sha256sum(filename):
     h = hashlib.sha256()
