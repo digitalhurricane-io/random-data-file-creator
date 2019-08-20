@@ -4,6 +4,8 @@ import random
 import string
 import sys
 
+incrementalHash = hashlib.sha256()
+
 def writeFile(numGB, path):
     singleGB = 1024*1024*1024
 
@@ -16,8 +18,13 @@ def writeFile(numGB, path):
     with open(outputPath, 'wb') as fout:
         # write 1 GB at a time so we don't run out of memory
         for i in range(numGB):
-            print(f'{i} GB written to disk')
-            fout.write(os.urandom(singleGB))
+            print('generating data')
+            randomData = os.urandom(singleGB)
+            print('starting write')
+            fout.write(randomData)
+            print(f'{i + 1} GB written to disk')
+            print('incrementing hash')
+            incrementalHash.update(randomData)
 
     return outputPath
 
@@ -57,9 +64,9 @@ if action == 'a':
     print('\nWriting file...\n')
 
     fileName = writeFile(int(desiredSize), outputPath)
-    fileHash = sha256sum(fileName)
-    print('sha256sum: ' + fileHash)
-    writeSumToFile(fileName, fileHash)
+    # fileHash = sha256sum(fileName)
+    print('sha256sum: ' + incrementalHash.hexdigest())
+    writeSumToFile(fileName, incrementalHash.hexdigest())
 
 
 elif action == 'b':
